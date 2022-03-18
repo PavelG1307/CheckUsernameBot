@@ -471,9 +471,8 @@ def hello(client, message):
                 except UsernameInvalid:
                     usernamearr.append(svusername)
                     idusersarr.append(message.chat.id)
-                    message.reply("Отслеживание " + svusername + " запущено!\nОтслеживаемые username'ы: /trackednames")
                     saveinfile(True)
-                    message.reply("Некорректный или заблокированный username!\nДобавил в список отслеживаемых!")
+                    message.reply("Некорректный или заблокированный username!\nОтслеживание " + svusername + " запущено!\nОтслеживаемые username'ы: /trackednames")
     else:
         if message.text=="/start_"+tokken:
                 saveusers(message.chat.id)
