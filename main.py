@@ -7,6 +7,7 @@ from datetime import datetime
 from pyrogram.handlers import MessageHandler
 
 
+n = 7
 
 mybot=Client(
     "my_bot",
@@ -15,18 +16,13 @@ mybot=Client(
     api_hash="724fe0f06ef691717c16d28c39430506"
 )
 
-my_apps = [
-    Client("my_account10",
-    api_id=12665897, 
-    api_hash = "152ea15b610551b6d2112868dde4b1eb"),
-    Client("my_account11",
-    api_id=19583065,
-    api_hash = "9ff80dd5e231bf02116e9160098eb096"),
-    Client("my_account12",
-    api_id=14443060,
-    api_hash = "e3674253f7f475b6a594ed4c34c85f12")
-]
+api_id=19852685
+api_hash = "724fe0f06ef691717c16d28c39430506"
 
+my_apps = []
+
+for i in range(n):
+    my_apps.append(Client(f'account{i}', api_id = api_id, api_hash = api_hash))
 
 usernamearr=[]
 idusersarr=[]
@@ -355,20 +351,6 @@ def hello(client, message):
             changeaccount()
             message.reply("Запущен " + str(workacc+1) + " аккаунт")
             fl2=True
-            
-        # if message.text=="yes" or message.text=="Yes": 
-        #     fl2=True
-        #     if fl==True:
-        #         createchannel(svusername,message.chat.id)
-        #     if flo==True:
-        #         usernamearr.append(svusername)
-        #         idusersarr.append(message.chat.id)
-        #         message.reply("Отслеживание запущено!\n" + listname(message.chat.id,0))
-        #         saveinfile(True)
-
-        # if message.text=="no" or message.text=="No":
-        #     fl2=True
-        #     fl=False
 
         if message.text.find("/stop_")!=-1:
             fl2=True
@@ -450,14 +432,8 @@ def hello(client, message):
             else:
                 try:
                     if my_apps[workacc].send(functions.account.CheckUsername(username=svusername)):
-                        # message.reply( "Свободен, занять? (yes/no)")
-                        # fl=True
-                        # flo=False
                         createchannel(svusername,message.chat.id)
                     else:
-                        # message.reply("Невозможно занять! Отслеживать? (yes/no)")
-                        # flo=True
-                        # fl=False
                         usernamearr.append(svusername)
                         idusersarr.append(message.chat.id)
                         message.reply("Отслеживание " + svusername + " запущено!\nОтслеживаемые username'ы: /trackednames")
