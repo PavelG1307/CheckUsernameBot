@@ -11,7 +11,7 @@ n = 7
 
 mybot=Client(
     "my_bot",
-    bot_token="5279594525:AAGf2FSM9DEBKhNkvP7CUGjbdMKgDpQzGPE",
+    bot_token="5372427759:AAHdw3tUd7apEIkSIpoP2cNkRoUffFZOuCY",
     api_id=19852685,
     api_hash="724fe0f06ef691717c16d28c39430506"
 )
