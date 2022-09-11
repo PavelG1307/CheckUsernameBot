@@ -9,9 +9,9 @@ from pyrogram.errors import RPCError, SessionPasswordNeeded, UserDeactivated, Us
 
 mybot = Client(
     "my_bot",
-    bot_token="5372427759:AAHdw3tUd7apEIkSIpoP2cNkRoUffFZOuCY",
-    api_id=19852685,
-    api_hash="724fe0f06ef691717c16d28c39430506"
+    bot_token="5447677593:AAHNpCnd5OGgyeMR79zEDbTgcURsYaMNpI8",
+    api_id=17929149,
+    api_hash="bf4d900c115a3f2ac85385f5a0bfd330"
 )
 
 api_id = 17929149
