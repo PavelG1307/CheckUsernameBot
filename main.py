@@ -584,7 +584,7 @@ def hello(client, message):
     else:
         if message.text == "/start_"+tokken:
             saveusers(message.chat.id)
-            message.reply("Введите ‘Username’, чтобы забронировать его или начать отслеживать\nДля взаимодействия с ботом используйте следующие команды:\n/trackednames – список отслеживаемых username’ов\n/avaiblenames  – список «забронированных» username’ов\n/release – отменить «бронирование» username’а из списка\n/stop – остановить отслеживание username’а из списка\n/help – список команд")
+            message.reply("Введите ‘Username’, чтобы забронировать его или начать отслеживать\nДля взаимодействия с ботом используйте следующие команды:\n/trackednames – список отслеживаемых username’ов\n/avaiblenames  – список «забронированных» username’ов\n/release – отменить «бронирование» username’а из списка\n/stop – остановить отслеживание username’а из списка\n/add_account – добавить новый аккаунт\n/help – список команд")
 
 
 mybot.start()
