@@ -299,7 +299,6 @@ def follow():
     while (asyncfl):
         time.sleep(59)
         available = False
-        print("...")
         # now = int(datetime.now().hour)*60+int(datetime.now().minute)+3*60
         now = int(datetime.now().hour)*60+int(datetime.now().minute)
         for i in range(len(timereq)):
