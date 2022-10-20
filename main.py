@@ -53,38 +53,53 @@ def openfromfile():
     global idusersarr
     global usernamearr
     global users, accounts_list
-    f = open('tracked_username.txt', 'r+')
     usernamearr = []
     idusersarr = []
-    lines = f.readline().split(" ")
-    for i in range(0, len(lines)//2):
-        usernamearr.append(lines[2*i])
-        idusersarr.append(int(lines[2*i+1]))
-    f.close()
-    f = open('tracked_channel.txt', 'r+')
-    lines = f.readline().split(" ")
-    for i in range(0, len(lines)//3):
-        channelarr.append(lines[3*i])
-        iduserchannel.append(int(lines[3*i+1]))
-        idapp.append(int(lines[3*i+2]))
-    f.close()
-    f = open('users', 'r+')
-    lines = f.readline().split(" ")
-
-    for i in range(0, len(lines)//2):
-        users.append(int(lines[2*i]))
-    f.close()
-
-    with open('./accounts.ini', 'r', encoding='utf-8') as fp:
-        data = fp.readlines()
+    try:
+        f = open('tracked_username.txt', 'r')
+        lines = f.readline().split(" ")
+        for i in range(0, len(lines)//2):
+            usernamearr.append(lines[2*i])
+            idusersarr.append(int(lines[2*i+1]))
+        f.close()
+    except:
+        f = open('tracked_username.txt', 'w')
+        f.close()
+    try:
+        f = open('tracked_channel.txt', 'r')
+        lines = f.readline().split(" ")
+        for i in range(0, len(lines)//3):
+            channelarr.append(lines[3*i])
+            iduserchannel.append(int(lines[3*i+1]))
+            idapp.append(int(lines[3*i+2]))
+        f.close()
+    except:
+        f = open('tracked_channel.txt', 'w')
+        f.close()
+    try:
+        f = open('users', 'r')
+        lines = f.readline().split(" ")
+        for i in range(0, len(lines)//2):
+            users.append(int(lines[2*i]))
+        f.close()
+    except:
+        f = open('users', 'w')
+        f.close()
+    try:
+        f = open('./accounts.ini', 'r', encoding='utf-8')
+        data = f.readlines()
         for i in range(len(data)):
             my_apps.append(Client('account{i}',session_string = data[i].rstrip(), api_hash = api_hash, api_id = api_id))
-    print('В работе ' + str(len(my_apps)) + ' аккаунтов')
+        print('В работе ' + str(len(my_apps)) + ' аккаунтов')
+    except:
+        f = open('./accounts.ini', 'w')
+        f.close()
+
 
 
 def saveinfile(fl):
     if fl:
-        f = open('tracked_username.txt', 'w+')
+        f = open('tracked_username.txt', 'w')
         f.truncate(0)
         savestr = ""
         for i in range(0, len(usernamearr)):
@@ -93,7 +108,7 @@ def saveinfile(fl):
         # f.write(str(idusersarr[i]))
         f.close()
     else:
-        f = open('tracked_channel.txt', 'w+')
+        f = open('tracked_channel.txt', 'w')
         f.truncate(0)
         savestr = ""
         for i in range(0, len(channelarr)):
@@ -106,7 +121,7 @@ def saveinfile(fl):
 def saveusers(id):
     global users
     users.append(id)
-    f = open('users', 'w+')
+    f = open('users', 'w')
     f.truncate(0)
     savestr = ""
     for i in range(0, len(users)):
@@ -209,6 +224,11 @@ def success_login(message):
     my_apps[-1].disconnect()
     my_apps[-1].start()
     my_apps[-1].send_message('me', 'Я в работе!')
+    me = my_apps[-1].get_me()
+    apps_data.append({
+        'phone': me.phone_number,
+        'username': me.username
+    })
     save_accounts()
 
 countcreatechannel = 0
