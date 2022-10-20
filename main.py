@@ -1,3 +1,7 @@
+bot_token = "5206831411:AAH3_lnU98drAyS97s-MUfDjr5gYQnyT56E"
+api_id = 17929149
+api_hash = "bf4d900c115a3f2ac85385f5a0bfd330"
+
 from pyrogram import Client, idle
 from pyrogram.raw import functions
 from threading import Thread
@@ -9,16 +13,16 @@ from pyrogram.errors import RPCError, SessionPasswordNeeded, UserDeactivated, Us
 
 mybot = Client(
     "my_bot",
-    bot_token="5447677593:AAHNpCnd5OGgyeMR79zEDbTgcURsYaMNpI8",
-    api_id=17929149,
-    api_hash="bf4d900c115a3f2ac85385f5a0bfd330"
+    bot_token = bot_token,
+    api_id = api_id,
+    api_hash = api_hash
 )
 
 api_id = 17929149
 api_hash = "bf4d900c115a3f2ac85385f5a0bfd330"
 
 my_apps = []
-
+apps_data = []
 usernamearr = []
 idusersarr = []
 
@@ -167,7 +171,7 @@ def listchannel(id, passw):
     if passw != password:
         for i in range(len(channelarr)):
             if (id == iduserchannel[i]):
-                answ += channelarr[i]+"\n"
+                answ += channelarr[i]+ " - аккаунт: " + apps_data[idapp[i]]['phone'] + "\n"
         if answ == "":
             answ = "Доступных username'ов нет!"
         else:
@@ -244,7 +248,7 @@ def createchannel(name, id):
         channelarr.append(name)
         iduserchannel.append(id)
         idapp.append(workacc)
-        mybot.send_message(id, "Username: " + name + " забронирован!")
+        mybot.send_message(id, "Username: " + name + " забронирован! Аккаунт: " + apps_data[workacc]['phone'])
         fl = False
     saveinfile(False)
 
@@ -590,7 +594,11 @@ def hello(client, message):
 mybot.start()
 for app in my_apps:
     app.start()
-
+    me = app.get_me()
+    apps_data.append({
+        'phone': me.phone_number,
+        'username': me.username
+    })
 idle()
 
 mybot.stop()
