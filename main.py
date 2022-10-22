@@ -18,9 +18,6 @@ mybot = Client(
     api_hash = api_hash
 )
 
-api_id = 17929149
-api_hash = "bf4d900c115a3f2ac85385f5a0bfd330"
-
 my_apps = []
 apps_data = []
 usernamearr = []
