@@ -250,8 +250,7 @@ def createchannel(name, id):
 
     except FloodWait as e:
         changeaccount()
-        mybot.send_message(id, "Достигнут лимит! Ограничение на: " +
-                           str(e.x)+" секунд! Включен аккаунт: " + str(workacc+1))
+        mybot.send_message(id, "Достигнут лимит!" + str(e.MESSAGE) + " Включен аккаунт: " + str(workacc+1))
         createchannel(name, id)
         return
     except Exception as e:
@@ -281,8 +280,7 @@ def deletechanel(name, message):
                 my_apps[idapp[channelarr.index(name)]].delete_channel(name)
             except FloodWait as e:
                 changeaccount()
-                message.reply("Достигнут лимит! Ожидайте: " + str(e.x) +
-                              " секунд! Включен аккаунт: " + str(workacc+1))
+                message.reply("Достигнут лимит!" + str(e.MESSAGE) + " Включен аккаунт: " + str(workacc+1))
                 return False
             except Exception:
                 message.reply("Ошибка!")
@@ -360,10 +358,8 @@ def follow():
                         flo = False
                         i -= 1
                         changeaccount()
-                        print("Достигнут лимит! Ограничение на: " + str(e.x) +
-                              " секунд! Включен аккаунт: " + str(workacc+1))
-                        sendallusers("Достигнут лимит! Ограничение на: " +
-                                     str(e.x)+" секунд! Включен аккаунт: " + str(workacc+1))
+                        print("Достигнут лимит!" + str(e.MESSAGE) + " Включен аккаунт: " + str(workacc+1))
+                        sendallusers("Достигнут лимит!" + str(e.MESSAGE) + " Включен аккаунт: " + str(workacc+1))
                     except Exception as e:
                         print(e)
                         sendallusers("Произошла ошибка!")
@@ -592,10 +588,8 @@ def hello(client, message):
                         fl = False
                         flo = False
                         changeaccount()
-                        print("Достигнут лимит! Ограничение на: " + str(e.x) +
-                              " секунд! Включен аккаунт: " + str(workacc+1))
-                        message.reply("Достигнут лимит! Ограничение на: " +
-                                      str(e.x)+" секунд! Включен аккаунт: " + str(workacc+1))
+                        print("Достигнут лимит!" + str(e.MESSAGE) + " Включен аккаунт: " + str(workacc+1))
+                        message.reply("Достигнут лимит!" + str(e.MESSAGE) + " Включен аккаунт: " + str(workacc+1))
                     except UsernameInvalid:
                         usernamearr.append(svusername)
                         idusersarr.append(message.chat.id)
