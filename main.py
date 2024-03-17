@@ -1,6 +1,6 @@
-bot_token = "5206831411:AAH3_lnU98drAyS97s-MUfDjr5gYQnyT56E"
-api_id = 17929149
-api_hash = "bf4d900c115a3f2ac85385f5a0bfd330"
+bot_token = "5748764070:AAEjfd3HLqOAcXY4Fo3vxau-5xTiKz3_XFw"
+api_id = 12580131
+api_hash = "09bcadf4428d8e962f201b8e3ae186e3"
 
 from pyrogram import Client, idle
 from pyrogram.raw import functions
@@ -604,12 +604,17 @@ def hello(client, message):
 
 mybot.start()
 for app in my_apps:
-    app.start()
-    me = app.get_me()
-    apps_data.append({
-        'phone': me.phone_number,
-        'username': me.username
-    })
+    try:
+        app.start()
+        me = app.get_me()
+        apps_data.append({
+            'phone': me.phone_number,
+            'username': me.username
+        })
+    except UserDeactivated:
+        my_apps.remove(app)
+
+print('Запустилось ' + str(len(my_apps)) + ' аккаунтов')
 idle()
 
 mybot.stop()
