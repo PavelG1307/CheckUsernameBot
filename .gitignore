@@ -2,3 +2,4 @@
 *.txt
 users
 .DS_Store
+*.session

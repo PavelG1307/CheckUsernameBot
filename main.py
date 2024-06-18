@@ -1,3 +1,7 @@
+bot_token = "5748764070:AAEjfd3HLqOAcXY4Fo3vxau-5xTiKz3_XFw"
+api_id = 12580131
+api_hash = "09bcadf4428d8e962f201b8e3ae186e3"
+
 from pyrogram import Client, idle
 from pyrogram.raw import functions
 from threading import Thread
@@ -9,16 +13,13 @@ from pyrogram.errors import RPCError, SessionPasswordNeeded, UserDeactivated, Us
 
 mybot = Client(
     "my_bot",
-    bot_token="5447677593:AAHNpCnd5OGgyeMR79zEDbTgcURsYaMNpI8",
-    api_id=17929149,
-    api_hash="bf4d900c115a3f2ac85385f5a0bfd330"
+    bot_token = bot_token,
+    api_id = api_id,
+    api_hash = api_hash
 )
 
-api_id = 17929149
-api_hash = "bf4d900c115a3f2ac85385f5a0bfd330"
-
 my_apps = []
-
+apps_data = []
 usernamearr = []
 idusersarr = []
 
@@ -49,38 +50,53 @@ def openfromfile():
     global idusersarr
     global usernamearr
     global users, accounts_list
-    f = open('tracked_username.txt', 'r+')
     usernamearr = []
     idusersarr = []
-    lines = f.readline().split(" ")
-    for i in range(0, len(lines)//2):
-        usernamearr.append(lines[2*i])
-        idusersarr.append(int(lines[2*i+1]))
-    f.close()
-    f = open('tracked_channel.txt', 'r+')
-    lines = f.readline().split(" ")
-    for i in range(0, len(lines)//3):
-        channelarr.append(lines[3*i])
-        iduserchannel.append(int(lines[3*i+1]))
-        idapp.append(int(lines[3*i+2]))
-    f.close()
-    f = open('users', 'r+')
-    lines = f.readline().split(" ")
-
-    for i in range(0, len(lines)//2):
-        users.append(int(lines[2*i]))
-    f.close()
-
-    with open('./accounts.ini', 'r', encoding='utf-8') as fp:
-        data = fp.readlines()
+    try:
+        f = open('tracked_username.txt', 'r')
+        lines = f.readline().split(" ")
+        for i in range(0, len(lines)//2):
+            usernamearr.append(lines[2*i])
+            idusersarr.append(int(lines[2*i+1]))
+        f.close()
+    except:
+        f = open('tracked_username.txt', 'w')
+        f.close()
+    try:
+        f = open('tracked_channel.txt', 'r')
+        lines = f.readline().split(" ")
+        for i in range(0, len(lines)//3):
+            channelarr.append(lines[3*i])
+            iduserchannel.append(int(lines[3*i+1]))
+            idapp.append(int(lines[3*i+2]))
+        f.close()
+    except:
+        f = open('tracked_channel.txt', 'w')
+        f.close()
+    try:
+        f = open('users', 'r')
+        lines = f.readline().split(" ")
+        for i in range(0, len(lines)//2):
+            users.append(int(lines[2*i]))
+        f.close()
+    except:
+        f = open('users', 'w')
+        f.close()
+    try:
+        f = open('./accounts.ini', 'r', encoding='utf-8')
+        data = f.readlines()
         for i in range(len(data)):
             my_apps.append(Client('account{i}',session_string = data[i].rstrip(), api_hash = api_hash, api_id = api_id))
-    print('В работе ' + str(len(my_apps)) + ' аккаунтов')
+        print('В работе ' + str(len(my_apps)) + ' аккаунтов')
+    except:
+        f = open('./accounts.ini', 'w')
+        f.close()
+
 
 
 def saveinfile(fl):
     if fl:
-        f = open('tracked_username.txt', 'w+')
+        f = open('tracked_username.txt', 'w')
         f.truncate(0)
         savestr = ""
         for i in range(0, len(usernamearr)):
@@ -89,7 +105,7 @@ def saveinfile(fl):
         # f.write(str(idusersarr[i]))
         f.close()
     else:
-        f = open('tracked_channel.txt', 'w+')
+        f = open('tracked_channel.txt', 'w')
         f.truncate(0)
         savestr = ""
         for i in range(0, len(channelarr)):
@@ -102,7 +118,7 @@ def saveinfile(fl):
 def saveusers(id):
     global users
     users.append(id)
-    f = open('users', 'w+')
+    f = open('users', 'w')
     f.truncate(0)
     savestr = ""
     for i in range(0, len(users)):
@@ -167,7 +183,7 @@ def listchannel(id, passw):
     if passw != password:
         for i in range(len(channelarr)):
             if (id == iduserchannel[i]):
-                answ += channelarr[i]+"\n"
+                answ += channelarr[i]+ " - аккаунт: " + apps_data[idapp[i]]['phone'] + "\n"
         if answ == "":
             answ = "Доступных username'ов нет!"
         else:
@@ -205,6 +221,11 @@ def success_login(message):
     my_apps[-1].disconnect()
     my_apps[-1].start()
     my_apps[-1].send_message('me', 'Я в работе!')
+    me = my_apps[-1].get_me()
+    apps_data.append({
+        'phone': me.phone_number,
+        'username': me.username
+    })
     save_accounts()
 
 countcreatechannel = 0
@@ -229,8 +250,7 @@ def createchannel(name, id):
 
     except FloodWait as e:
         changeaccount()
-        mybot.send_message(id, "Достигнут лимит! Ограничение на: " +
-                           str(e.x)+" секунд! Включен аккаунт: " + str(workacc+1))
+        mybot.send_message(id, "Достигнут лимит!" + str(e.MESSAGE) + " Включен аккаунт: " + str(workacc+1))
         createchannel(name, id)
         return
     except Exception as e:
@@ -244,7 +264,7 @@ def createchannel(name, id):
         channelarr.append(name)
         iduserchannel.append(id)
         idapp.append(workacc)
-        mybot.send_message(id, "Username: " + name + " забронирован!")
+        mybot.send_message(id, "Username: " + name + " забронирован! Аккаунт: " + apps_data[workacc]['phone'])
         fl = False
     saveinfile(False)
 
@@ -260,8 +280,7 @@ def deletechanel(name, message):
                 my_apps[idapp[channelarr.index(name)]].delete_channel(name)
             except FloodWait as e:
                 changeaccount()
-                message.reply("Достигнут лимит! Ожидайте: " + str(e.x) +
-                              " секунд! Включен аккаунт: " + str(workacc+1))
+                message.reply("Достигнут лимит!" + str(e.MESSAGE) + " Включен аккаунт: " + str(workacc+1))
                 return False
             except Exception:
                 message.reply("Ошибка!")
@@ -339,10 +358,8 @@ def follow():
                         flo = False
                         i -= 1
                         changeaccount()
-                        print("Достигнут лимит! Ограничение на: " + str(e.x) +
-                              " секунд! Включен аккаунт: " + str(workacc+1))
-                        sendallusers("Достигнут лимит! Ограничение на: " +
-                                     str(e.x)+" секунд! Включен аккаунт: " + str(workacc+1))
+                        print("Достигнут лимит!" + str(e.MESSAGE) + " Включен аккаунт: " + str(workacc+1))
+                        sendallusers("Достигнут лимит!" + str(e.MESSAGE) + " Включен аккаунт: " + str(workacc+1))
                     except Exception as e:
                         print(e)
                         sendallusers("Произошла ошибка!")
@@ -571,10 +588,8 @@ def hello(client, message):
                         fl = False
                         flo = False
                         changeaccount()
-                        print("Достигнут лимит! Ограничение на: " + str(e.x) +
-                              " секунд! Включен аккаунт: " + str(workacc+1))
-                        message.reply("Достигнут лимит! Ограничение на: " +
-                                      str(e.x)+" секунд! Включен аккаунт: " + str(workacc+1))
+                        print("Достигнут лимит!" + str(e.MESSAGE) + " Включен аккаунт: " + str(workacc+1))
+                        message.reply("Достигнут лимит!" + str(e.MESSAGE) + " Включен аккаунт: " + str(workacc+1))
                     except UsernameInvalid:
                         usernamearr.append(svusername)
                         idusersarr.append(message.chat.id)
@@ -589,8 +604,17 @@ def hello(client, message):
 
 mybot.start()
 for app in my_apps:
-    app.start()
+    try:
+        app.start()
+        me = app.get_me()
+        apps_data.append({
+            'phone': me.phone_number,
+            'username': me.username
+        })
+    except UserDeactivated:
+        my_apps.remove(app)
 
+print('Запустилось ' + str(len(my_apps)) + ' аккаунтов')
 idle()
 
 mybot.stop()
